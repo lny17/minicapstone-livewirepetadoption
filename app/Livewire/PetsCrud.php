@@ -48,33 +48,36 @@ class PetsCrud extends Component
     }
 
     public function save()
-    {
-        $this->validate();
+{
+    $this->validate();
 
-        if ($this->newImage) {
-            $imageName = time() . '.' . $this->newImage->extension();
-            $this->newImage->storeAs('pets', $imageName, 'public');
-        }
-
-        $finalImage = $this->newImage ? $imageName : ($this->pet_id ? Pet::find($this->pet_id)->image : null);
-
-        Pet::updateOrCreate(
-            ['id' => $this->pet_id],
-            [
-                'image' => $finalImage,
-                'name' => $this->name,
-                'species' => $this->species,
-                'sex' => $this->sex,
-                'status' => $this->status,
-                'arrival_date' => $this->arrival_date,
-            ]
-        );
-
-        $this->resetPage();
-        session()->flash('message', $this->pet_id ? 'Pet updated successfully!' : 'Pet added successfully!');
-        $this->closeModal();
-        $this->resetFields();
+    if ($this->newImage) {
+        $imageName = time() . '.' . $this->newImage->extension();
+        $this->newImage->storeAs('pets', $imageName, 'public');
     }
+
+    $finalImage = $this->newImage ? $imageName : ($this->pet_id ? Pet::find($this->pet_id)->image : null);
+
+    $pet = Pet::updateOrCreate(
+        ['id' => $this->pet_id],
+        [
+            'image' => $finalImage,
+            'name' => $this->name,
+            'species' => $this->species,
+            'sex' => $this->sex,
+            'status' => $this->status,
+            'arrival_date' => $this->arrival_date,
+        ]
+    );
+
+    // Update $image so it displays immediately after save
+    $this->image = $pet->image;
+    $this->newImage = null;
+
+    $this->resetPage();
+    session()->flash('message', $this->pet_id ? 'Pet updated successfully!' : 'Pet added successfully!');
+    $this->closeModal();
+}
 
     public function edit($id)
     {

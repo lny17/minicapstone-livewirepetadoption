@@ -51,7 +51,7 @@ class AdoptationsCrud extends Component
         Adoptations::updateOrCreate(
             ['id' => $this->adoptation_id],
             [
-                'adoptationRequest_id' => $this->adoptationRequest_id,
+                'adoptation_request_id' => $this->adoptationRequest_id,
                 'adoptation_date' => $this->adoptation_date,
                 'staff_id' => $this->staff_id,
             ]
@@ -66,7 +66,7 @@ class AdoptationsCrud extends Component
     public function edit($id){
         $adopt = Adoptations::findOrFail($id);
         $this->adoptation_id = $adopt->id;
-        $this->adoptationRequest_id = $adopt->adoptationRequest_id;
+        $this->adoptationRequest_id = $adopt->adoptation_request_id;
         $this->adoptation_date = $adopt->adoptation_date;
         $this->staff_id = $adopt->staff_id;
 
